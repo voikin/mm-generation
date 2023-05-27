@@ -7,13 +7,20 @@ class Product(BaseModel):
     name: str
     weight: float
 
+    class Config:
+        orm_mode = True
+
 
 class Recipe(BaseModel):
     name: str
-    weight: float
     calories: float
-    photo: str
+    img: str
+    url: str
+    weight: float
     products: List[Product]
+
+    class Config:
+        orm_mode = True
 
 
 class Ration(BaseModel):
@@ -25,6 +32,5 @@ class Ration(BaseModel):
     saturday: List[Recipe]
     sunday: List[Recipe]
 
-
-class Ids(BaseModel):
-    ids: List[str]
+    class Config:
+        orm_mode = True

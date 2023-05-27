@@ -11,3 +11,4 @@ DB_PORT = os.environ.get('DB_PORT', '5432')
 DB_NAME = os.environ.get('DB_NAME', 'mm')
 
 mongo_uri = os.environ.get('MONGO_URI', 'mongodb://localhost:27017')
+DB_URI = f'postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
