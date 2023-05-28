@@ -22,10 +22,9 @@ async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
 
 
 async def generate_rations(calories: int, session: AsyncSession):
-    stmt = select(Recipe).options(selectinload(Recipe.product).selectinload(ProductRecipe.product)).where(Recipe.calories <= calories // 21)
+    stmt = select(Recipe).options(selectinload(Recipe.product).selectinload(ProductRecipe.product)).where(Recipe.calories <= calories // 3)
     res = await session.execute(stmt)
     recipes = res.scalars().all()
-    daily_calories = calories // 7
     diet = {
         'monday': [],
         'tuesday': [],
@@ -37,9 +36,9 @@ async def generate_rations(calories: int, session: AsyncSession):
     }
 
     for day in diet:
-        remaining_calories = daily_calories
+        remaining_calories = calories
         for _ in range(3):  # минимум 3 блюда
-            suitable_recipes = [recipe for recipe in recipes if recipe.calories <= remaining_calories]
+            suitable_recipes = [recipe for recipe in recipes if recipe.calories <= remaining_calories and recipe.name not in [i.name for i in diet[day]]]
             if not suitable_recipes:  # нет подходящих рецептов, выходим из цикла
                 break
             chosen_recipe = random.choice(suitable_recipes)  # выбираем случайное блюдо из подходящих
@@ -62,7 +61,7 @@ async def generate_rations(calories: int, session: AsyncSession):
 
         # Если после выбора 3 блюд остались калории, выбираем еще блюда
         while remaining_calories > min(recipe.calories for recipe in recipes):
-            suitable_recipes = [recipe for recipe in recipes if recipe.calories <= remaining_calories]
+            suitable_recipes = [recipe for recipe in recipes if recipe.calories <= remaining_calories and recipe.name not in [i.name for i in diet[day]]]
             if not suitable_recipes:  # нет подходящих рецептов, выходим из цикла
                 break
             chosen_recipe = random.choice(suitable_recipes)  # выбираем случайное блюдо из подходящих
