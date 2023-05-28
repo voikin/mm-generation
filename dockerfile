@@ -6,5 +6,4 @@ ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 COPY . /app
 WORKDIR /app
-RUN chmod +x /run.sh
-CMD /run.sh
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
