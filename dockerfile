@@ -6,5 +6,5 @@ ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 COPY . /app
 WORKDIR /app
-RUN chmod +x /run.sh
+RUN chmod +x ./run.sh
 CMD ./run.sh
