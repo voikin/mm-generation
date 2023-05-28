@@ -19,7 +19,7 @@ app = FastAPI()
 @app.on_event("startup")
 async def startup_event():
     app.state.mongodb_client = AsyncIOMotorClient(mongo_uri)
-    app.state.mongodb = app.state.mongodb_client["generator"]
+    app.state.mongodb = app.state.mongodb_client["mealmapper"]
 
 
 @app.on_event("shutdown")
@@ -28,14 +28,14 @@ async def shutdown_event():
 
 
 async def get_db():
-    return app.state.mongodb
+    yield app.state.mongodb
 
 
 
 
 @app.get('/list')
 async def get_list(session: AsyncSession = Depends(get_async_session)):
-    return [await generate_rations(random.randint(14000, 20000), session) for _ in range(10)]
+    return [await generate_rations(random.randint(2000, 3000), session) for _ in range(10)]
 
 
 @app.get('/generateRation/{calories}')
