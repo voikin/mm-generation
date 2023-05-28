@@ -7,4 +7,4 @@ ENV PYTHONDONTWRITEBYTECODE 1
 COPY . /app
 WORKDIR /app
 RUN chmod +x /run.sh
-CMD /run.sh
+CMD ./run.sh
